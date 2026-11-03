@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Global Single Primary Typography: Manrope with system fallbacks */
+  --font-manrope: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-sans: var(--font-manrope);
+  --font-serif: var(--font-manrope);
+
+  /* Preset 1: Rose Atelier (Default) */
+  --theme-id: 'rose';
+  --theme-bg: #FFF9F8;
+  --theme-card: #FFFFFF;
+  --theme-border: #F3EAE8;
+  --theme-primary: #B65B78;
+  --theme-primary-dark: #8F3E58;
+  --theme-primary-light: #FDF2F4;
+  --theme-accent: #C79A62;
+  --theme-accent-light: #FCF8F2;
+  --theme-text-main: #25212A;
+  --theme-text-muted: #6F6775;
+  --theme-contrast: #FFFFFF;
+}
+
+[data-theme="sage"] {
+  /* Preset 2: Sage Serenity */
+  --theme-id: 'sage';
+  --theme-bg: #F6FAF5;
+  --theme-card: #FFFFFF;
+  --theme-border: #E5ECE4;
+  --theme-primary: #477F69;
+  --theme-primary-dark: #2E5848;
+  --theme-primary-light: #EEF5F1;
+  --theme-accent: #B89255;
+  --theme-accent-light: #F8F5EE;
+  --theme-text-main: #1E3029;
+  --theme-text-muted: #5D7267;
+  --theme-contrast: #FFFFFF;
+}
+
+[data-theme="lavender"] {
+  /* Preset 3: Lavender Glow */
+  --theme-id: 'lavender';
+  --theme-bg: #F9F7FF;
+  --theme-card: #FFFFFF;
+  --theme-border: #ECE8F7;
+  --theme-primary: #7856A8;
+  --theme-primary-dark: #54397B;
+  --theme-primary-light: #F3EEFA;
+  --theme-accent: #BA9452;
+  --theme-accent-light: #FAF5EB;
+  --theme-text-main: #29223A;
+  --theme-text-muted: #6B627F;
+  --theme-contrast: #FFFFFF;
+}
+
+[data-theme="peach"] {
+  /* Preset 4: Peach Bloom */
+  --theme-id: 'peach';
+  --theme-bg: #FFF9F3;
+  --theme-card: #FFFFFF;
+  --theme-border: #F5EAE1;
+  --theme-primary: #A65C43;
+  --theme-primary-dark: #7E3E28;
+  --theme-primary-light: #FCF1EB;
+  --theme-accent: #BD9854;
+  --theme-accent-light: #F9F4EB;
+  --theme-text-main: #33251E;
+  --theme-text-muted: #756259;
+  --theme-contrast: #FFFFFF;
+}
+
+[data-theme="ocean"] {
+  /* Preset 5: Ocean Mist */
+  --theme-id: 'ocean';
+  --theme-bg: #F5FAFC;
+  --theme-card: #FFFFFF;
+  --theme-border: #E0EBF0;
+  --theme-primary: #287A91;
+  --theme-primary-dark: #195262;
+  --theme-primary-light: #ECF5F8;
+  --theme-accent: #C29655;
+  --theme-accent-light: #FBF6ED;
+  --theme-text-main: #18313B;
+  --theme-text-muted: #536C77;
+  --theme-contrast: #FFFFFF;
+}
+
+[data-theme="midnight"] {
+  /* Preset 6: Midnight Luxe (Dark mode) */
+  --theme-id: 'midnight';
+  --theme-bg: #14141B;
+  --theme-card: #21212B;
+  --theme-border: #2F2F3D;
+  --theme-primary: #D99AAB;
+  --theme-primary-dark: #F3C5D1;
+  --theme-primary-light: #2D252E;
+  --theme-accent: #D8B26E;
+  --theme-accent-light: #2E2822;
+  --theme-text-main: #F8F5F8;
+  --theme-text-muted: #A79FA9;
+  --theme-contrast: #14141B;
+}
+
+body {
+  background-color: var(--theme-bg);
+  color: var(--theme-text-main);
+  font-family: var(--font-manrope);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Luxury scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--theme-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--theme-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--theme-primary);
+}
+
+.luxury-glass {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Reduced motion support for accessibility per Section 2.7 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "name": "beyond-beauty-saloon-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Beyond Beauty Saloon - Customer Booking & Salon Operations Platform",
+  "author": "Beyond Beauty Saloon Team",
+  "license": "UNLICENSED",
+  "packageManager": "pnpm@12.15.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @beyond/api --filter @beyond/web dev",
+    "dev:api": "pnpm --filter @beyond/api dev",
+    "dev:web": "pnpm --filter @beyond/web dev",
+    "build": "pnpm --recursive run build",
+    "test": "pnpm --recursive run test",
+    "typecheck": "pnpm --recursive run typecheck",
+    "lint": "pnpm --recursive run lint",
+    "db:generate": "pnpm --filter @beyond/api db:generate",
+    "db:push": "pnpm --filter @beyond/api db:push",
+    "db:seed": "pnpm --filter @beyond/api db:seed"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "prisma",
+      "esbuild"
+    ]
+  }
+}

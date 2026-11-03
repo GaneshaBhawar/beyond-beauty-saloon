@@ -1,0 +1,461 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// ==========================================
+// 1. Identity & RBAC
+// ==========================================
+
+model User {
+  id              String           @id @default(uuid())
+  email           String           @unique
+  phone           String?
+  passwordHash    String
+  role            String           @default("CUSTOMER") // CUSTOMER | EMPLOYEE | OWNER_ADMIN
+  status          String           @default("ACTIVE")   // ACTIVE | SUSPENDED | INACTIVE
+  firstName       String
+  lastName        String
+  emailVerifiedAt DateTime?
+  phoneVerifiedAt DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  customerProfile CustomerProfile?
+  employeeProfile EmployeeProfile?
+  notifications   Notification[]
+  auditLogs       AuditLog[]
+  paymentsRecorded Payment[]
+  invoicesCreated Invoice[]
+}
+
+model CustomerProfile {
+  id                       String        @id @default(uuid())
+  userId                   String        @unique
+  user                     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gender                   String?
+  dateOfBirth              DateTime?
+  allergiesOrSensitivities String?
+  preferredStylistNotes    String?
+  marketingConsent         Boolean       @default(false)
+  totalVisitsCount         Int           @default(0)
+  createdAt                DateTime      @default(now())
+  updatedAt                DateTime      @updatedAt
+
+  appointments             Appointment[]
+  visits                   Visit[]
+  invoices                 Invoice[]
+}
+
+model EmployeeProfile {
+  id                String                 @id @default(uuid())
+  userId            String                 @unique
+  user              User                   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  staffCode         String                 @unique
+  displayName       String
+  jobTitle          String
+  isPublicBookable  Boolean                @default(true)
+  employmentStatus  String                 @default("FULL_TIME")
+  baseSalaryPaise   Int                    @default(0)
+  commissionRateBps Int                    @default(0)
+  dateOfJoining     DateTime               @default(now())
+  colorTag          String                 @default("#B78693")
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+
+  skills            EmployeeServiceSkill[]
+  shifts            StaffShift[]
+  timeOff           TimeOff[]
+  allocations       AppointmentAllocation[]
+  attendance        AttendanceRecord[]
+  salaryPeriods     SalaryPeriod[]
+  salaryAdvances    SalaryAdvance[]
+  serviceLinesDone  VisitServiceLine[]
+  visitsAssigned    Visit[]
+}
+
+model EmployeeServiceSkill {
+  id               String          @id @default(uuid())
+  employeeId       String
+  employee         EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  serviceId        String
+  service          Service         @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  proficiencyLevel String          @default("STANDARD")
+
+  @@unique([employeeId, serviceId])
+}
+
+// ==========================================
+// 2. Catalog & Taxonomy
+// ==========================================
+
+model ServiceCategory {
+  id           String    @id @default(uuid())
+  slug         String    @unique
+  name         String
+  description  String?
+  displayOrder Int       @default(0)
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  services     Service[]
+}
+
+model Service {
+  id                   String                 @id @default(uuid())
+  categoryId           String
+  category             ServiceCategory        @relation(fields: [categoryId], references: [id])
+  slug                 String                 @unique
+  name                 String
+  shortDescription     String?
+  fullDescription      String?
+  durationMinutes      Int
+  bufferAfterMinutes   Int                    @default(5)
+  pricePaise           Int?
+  isPriceVariable      Boolean                @default(false)
+  requiresConsultation Boolean                @default(false)
+  isActive             Boolean                @default(true)
+  isFeatured           Boolean                @default(false)
+  preparationNotes     String?
+  aftercareNotes       String?
+  createdAt            DateTime               @default(now())
+  updatedAt            DateTime               @updatedAt
+
+  skills               EmployeeServiceSkill[]
+  appointmentServices  AppointmentService[]
+  visitServiceLines    VisitServiceLine[]
+}
+
+// ==========================================
+// 3. Scheduling & Shifts
+// ==========================================
+
+model BusinessOperatingHour {
+  id        String   @id @default(uuid())
+  dayOfWeek Int      @unique
+  isClosed  Boolean  @default(false)
+  openTime  String   @default("10:00")
+  closeTime String   @default("20:00")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model BusinessClosure {
+  id          String   @id @default(uuid())
+  closureDate DateTime
+  reason      String
+  isFullDay   Boolean  @default(true)
+  openTime    String?
+  closeTime   String?
+  createdAt   DateTime @default(now())
+}
+
+model StaffShift {
+  id          String          @id @default(uuid())
+  employeeId  String
+  employee    EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  dayOfWeek   Int
+  shiftStart  String          @default("10:00")
+  shiftEnd    String          @default("20:00")
+  breakStart  String?         @default("13:00")
+  breakEnd    String?         @default("14:00")
+  isRecurring Boolean         @default(true)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  @@unique([employeeId, dayOfWeek])
+}
+
+model TimeOff {
+  id         String          @id @default(uuid())
+  employeeId String
+  employee   EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  startTime  DateTime
+  endTime    DateTime
+  type       String          @default("CASUAL_LEAVE")
+  status     String          @default("PENDING")
+  notes      String?
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+}
+
+// ==========================================
+// 4. Appointments & Concurrency
+// ==========================================
+
+model Appointment {
+  id                   String                  @id @default(uuid())
+  referenceCode        String                  @unique
+  customerId           String
+  customer             CustomerProfile         @relation(fields: [customerId], references: [id])
+  status               String                  @default("CONFIRMED")
+  startTime            DateTime
+  endTime              DateTime
+  totalDurationMinutes Int
+  estimatedTotalPaise  Int                     @default(0)
+  customerNotes        String?
+  internalNotes        String?
+  idempotencyKey       String?                 @unique
+  cancellationReason   String?
+  cancelledAt          DateTime?
+  createdAt            DateTime                @default(now())
+  updatedAt            DateTime                @updatedAt
+
+  services             AppointmentService[]
+  allocations          AppointmentAllocation[]
+  events               AppointmentEvent[]
+  visit                Visit?
+}
+
+model AppointmentService {
+  id                  String      @id @default(uuid())
+  appointmentId       String
+  appointment         Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  serviceId           String
+  service             Service     @relation(fields: [serviceId], references: [id])
+  sequenceOrder       Int         @default(1)
+  durationMinutes     Int
+  priceAtBookingPaise Int?
+}
+
+model AppointmentAllocation {
+  id            String          @id @default(uuid())
+  appointmentId String
+  appointment   Appointment     @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  employeeId    String
+  employee      EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  startTime     DateTime
+  endTime       DateTime
+  createdAt     DateTime        @default(now())
+
+  @@index([employeeId, startTime, endTime])
+}
+
+model AppointmentEvent {
+  id             String      @id @default(uuid())
+  appointmentId  String
+  appointment    Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+  previousStatus String?
+  newStatus      String
+  actorUserId    String
+  reason         String?
+  metadata       String?
+  createdAt      DateTime    @default(now())
+}
+
+// ==========================================
+// 5. Visits, Billing & Payments
+// ==========================================
+
+model Visit {
+  id                String             @id @default(uuid())
+  appointmentId     String?            @unique
+  appointment       Appointment?       @relation(fields: [appointmentId], references: [id])
+  customerId        String
+  customer          CustomerProfile    @relation(fields: [customerId], references: [id])
+  primaryEmployeeId String
+  primaryEmployee   EmployeeProfile    @relation(fields: [primaryEmployeeId], references: [id])
+  isWalkIn          Boolean            @default(false)
+  checkInTime       DateTime           @default(now())
+  completionTime    DateTime?
+  status            String             @default("IN_PROGRESS")
+  serviceNotes      String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+
+  serviceLines      VisitServiceLine[]
+  invoice           Invoice?
+}
+
+model VisitServiceLine {
+  id                String          @id @default(uuid())
+  visitId           String
+  visit             Visit           @relation(fields: [visitId], references: [id], onDelete: Cascade)
+  serviceId         String
+  service           Service         @relation(fields: [serviceId], references: [id])
+  employeeId        String
+  employee          EmployeeProfile @relation(fields: [employeeId], references: [id])
+  quantity          Int             @default(1)
+  unitPricePaise    Int
+  discountPaise     Int             @default(0)
+  totalPaise        Int
+  isApprovedByAdmin Boolean         @default(false)
+  createdAt         DateTime        @default(now())
+}
+
+model Invoice {
+  id               String          @id @default(uuid())
+  invoiceNumber    String          @unique
+  visitId          String?         @unique
+  visit            Visit?          @relation(fields: [visitId], references: [id])
+  customerId       String
+  customer         CustomerProfile @relation(fields: [customerId], references: [id])
+  subtotalPaise    Int             @default(0)
+  discountPaise    Int             @default(0)
+  taxPaise         Int             @default(0)
+  totalPaise       Int             @default(0)
+  paidAmountPaise  Int             @default(0)
+  balanceDuePaise  Int             @default(0)
+  status           String          @default("DRAFT")
+  issuedAt         DateTime?
+  createdByUserId  String
+  createdByUser    User            @relation(fields: [createdByUserId], references: [id])
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  payments         Payment[]
+}
+
+model Payment {
+  id                   String   @id @default(uuid())
+  invoiceId            String
+  invoice              Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  paymentMethod        String   @default("CASH")
+  amountPaise          Int
+  transactionReference String?
+  recordedByUserId     String
+  recordedByUser       User     @relation(fields: [recordedByUserId], references: [id])
+  paymentDate          DateTime @default(now())
+  notes                String?
+}
+
+// ==========================================
+// 6. Attendance & Payroll
+// ==========================================
+
+model AttendanceRecord {
+  id                  String          @id @default(uuid())
+  employeeId          String
+  employee            EmployeeProfile @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  date                DateTime
+  checkInTime         DateTime?
+  checkOutTime        DateTime?
+  status              String          @default("PRESENT")
+  isManuallyCorrected Boolean         @default(false)
+  correctionReason    String?
+  createdAt           DateTime        @default(now())
+  updatedAt           DateTime        @updatedAt
+
+  @@unique([employeeId, date])
+}
+
+model SalaryPeriod {
+  id                       String             @id @default(uuid())
+  employeeId               String
+  employee                 EmployeeProfile    @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  periodStart              DateTime
+  periodEnd                DateTime
+  baseSalaryPaise          Int
+  commissionPaise          Int                @default(0)
+  overtimeOrBonusPaise     Int                @default(0)
+  attendanceDeductionsPaise Int               @default(0)
+  advanceRecoveryPaise     Int                @default(0)
+  netPayoutPaise           Int
+  status                   String             @default("DRAFT")
+  paidOn                   DateTime?
+  disbursementMethod       String?
+  publishedToEmployee      Boolean            @default(false)
+  createdAt                DateTime           @default(now())
+  updatedAt                DateTime           @updatedAt
+
+  recoveries               AdvanceRecovery[]
+}
+
+model SalaryAdvance {
+  id                  String            @id @default(uuid())
+  employeeId          String
+  employee            EmployeeProfile   @relation(fields: [employeeId], references: [id], onDelete: Cascade)
+  amountPaise         Int
+  status              String            @default("APPROVED")
+  disbursedAt         DateTime          @default(now())
+  repaidAmountPaise   Int               @default(0)
+  remainingBalancePaise Int
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  recoveries          AdvanceRecovery[]
+}
+
+model AdvanceRecovery {
+  id                  String        @id @default(uuid())
+  advanceId           String
+  advance             SalaryAdvance @relation(fields: [advanceId], references: [id], onDelete: Cascade)
+  salaryPeriodId      String
+  salaryPeriod        SalaryPeriod  @relation(fields: [salaryPeriodId], references: [id], onDelete: Cascade)
+  recoveredAmountPaise Int
+  recordedAt          DateTime      @default(now())
+}
+
+// ==========================================
+// 7. Operations, CMS, Notifications & Audit
+// ==========================================
+
+model InventoryItem {
+  id               String   @id @default(uuid())
+  sku              String   @unique
+  name             String
+  category         String   @default("CONSUMABLES")
+  unit             String   @default("BOTTLE")
+  currentQuantity  Int      @default(0)
+  minAlertQuantity Int      @default(5)
+  costPerUnitPaise Int      @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  movements        StockMovement[]
+}
+
+model StockMovement {
+  id            String        @id @default(uuid())
+  itemId        String
+  item          InventoryItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  movementType  String
+  quantity      Int
+  unitCostPaise Int           @default(0)
+  reason        String?
+  createdAt     DateTime      @default(now())
+}
+
+model Offer {
+  id              String    @id @default(uuid())
+  code            String    @unique
+  title           String
+  description     String?
+  discountPercent Int?
+  discountPaise   Int?
+  startDate       DateTime
+  endDate         DateTime
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Notification {
+  id                String    @id @default(uuid())
+  recipientUserId   String
+  recipientUser     User      @relation(fields: [recipientUserId], references: [id], onDelete: Cascade)
+  title             String
+  message           String
+  type              String    @default("ALERT")
+  relatedEntityType String?
+  relatedEntityId   String?
+  isRead            Boolean   @default(false)
+  readAt            DateTime?
+  createdAt         DateTime  @default(now())
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  action     String
+  targetType String
+  targetId   String
+  changes    String?
+  createdAt  DateTime @default(now())
+}
