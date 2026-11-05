@@ -165,30 +165,30 @@ export default function HomePage() {
         </div>
 
         {/* Hero Content: Sharp, high-contrast text and action buttons */}
-        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-20 lg:py-28 text-center text-white space-y-6">
+        <div className="relative z-10 max-w-5xl mx-auto px-3 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28 text-center text-white space-y-6 w-full max-w-full overflow-hidden">
           
           {/* Introductory Line */}
-          <div className="inline-flex items-center space-x-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-xs font-bold text-[#C7A77D] tracking-widest uppercase shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-[#C7A77D]" />
-            <span>BEYOND BEAUTY SALOON • AHILYANAGAR</span>
+          <div className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full bg-white/15 backdrop-blur-md border border-white/25 text-[10px] sm:text-xs font-bold text-[#C7A77D] tracking-wider sm:tracking-widest uppercase shadow-xs max-w-full">
+            <Sparkles className="w-3 h-3 sm:w-3.5 sm:h-3.5 text-[#C7A77D] shrink-0" />
+            <span className="truncate">Beyond Beauty Saloon • Ahilyanagar</span>
           </div>
 
           {/* Primary Headline */}
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.15] drop-shadow-sm font-sans">
-            Beauty Beyond <br className="hidden sm:inline" />
+          <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-[1.15] drop-shadow-sm font-sans break-words">
+            Beauty Beyond <br className="inline" />
             <span className="text-[#C7A77D]">Expectations</span>
           </h1>
 
           {/* Supporting Copy */}
-          <p className="text-base sm:text-xl text-neutral-200 max-w-2xl mx-auto leading-relaxed font-normal">
+          <p className="text-sm sm:text-lg md:text-xl text-neutral-200 max-w-2xl mx-auto leading-relaxed font-normal px-2">
             Discover a personalised beauty and grooming experience at Beyond Beauty Saloon, Savedi.
           </p>
 
           {/* Action CTAs */}
-          <div className="pt-4 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div className="pt-2 sm:pt-4 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 w-full max-w-md mx-auto">
             <Link
               href="/book"
-              className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-full text-xs font-bold tracking-wider uppercase text-white bg-[#B76E79] hover:bg-[#9A5A64] shadow-lg hover:shadow-xl hover:scale-102 transition-all cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-xs font-bold tracking-wider uppercase text-white bg-[#B76E79] hover:bg-[#9A5A64] shadow-lg hover:shadow-xl hover:scale-102 transition-all cursor-pointer"
             >
               <Calendar className="w-4 h-4 mr-2" />
               Book Appointment
@@ -196,7 +196,7 @@ export default function HomePage() {
 
             <a
               href="#services"
-              className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 rounded-full text-xs font-bold tracking-wider uppercase text-white bg-white/15 hover:bg-white/25 border border-white/30 backdrop-blur-md shadow-md transition-all cursor-pointer"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-full text-xs font-bold tracking-wider uppercase text-white bg-white/15 hover:bg-white/25 border border-white/30 backdrop-blur-md shadow-md transition-all cursor-pointer"
             >
               Explore Services
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -204,25 +204,25 @@ export default function HomePage() {
           </div>
 
           {/* Trust Highlights */}
-          <div className="pt-8 grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-4xl mx-auto border-t border-white/20 text-neutral-200 text-xs">
-            <div className="space-y-0.5">
-              <span className="block font-bold text-white text-sm">Shrikrishna Nagar</span>
-              <span className="text-neutral-300 text-[11px]">Savedi, Ahilyanagar</span>
+          <div className="pt-6 sm:pt-8 grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 max-w-4xl mx-auto border-t border-white/20 text-neutral-200 text-xs">
+            <div className="space-y-0.5 bg-black/20 sm:bg-transparent p-2 sm:p-0 rounded-xl backdrop-blur-2xs sm:backdrop-blur-none">
+              <span className="block font-bold text-white text-xs sm:text-sm">Shrikrishna Nagar</span>
+              <span className="text-neutral-300 text-[10px] sm:text-[11px] block">Savedi, Ahilyanagar</span>
             </div>
-            <div className="space-y-0.5">
-              <span className="block font-bold text-white text-sm">Tue – Sun Schedule</span>
-              <span className="text-neutral-300 text-[11px]">8:30 AM – 9:30 PM (Mon Closed)</span>
+            <div className="space-y-0.5 bg-black/20 sm:bg-transparent p-2 sm:p-0 rounded-xl backdrop-blur-2xs sm:backdrop-blur-none">
+              <span className="block font-bold text-white text-xs sm:text-sm">Tue – Sun Schedule</span>
+              <span className="text-neutral-300 text-[10px] sm:text-[11px] block">8:30 AM – 9:30 PM (Mon Closed)</span>
             </div>
-            <div className="space-y-0.5">
-              <span className="block font-bold text-white text-sm flex items-center justify-center">
+            <div className="space-y-0.5 bg-black/20 sm:bg-transparent p-2 sm:p-0 rounded-xl backdrop-blur-2xs sm:backdrop-blur-none">
+              <span className="block font-bold text-white text-xs sm:text-sm flex items-center justify-center">
                 4.7 Rating
-                <Star className="w-3.5 h-3.5 fill-[#C7A77D] text-[#C7A77D] ml-1 inline" />
+                <Star className="w-3 h-3 sm:w-3.5 sm:h-3.5 fill-[#C7A77D] text-[#C7A77D] ml-1 inline" />
               </span>
-              <span className="text-neutral-300 text-[11px]">100+ Verified Client Reviews</span>
+              <span className="text-neutral-300 text-[10px] sm:text-[11px] block">100+ Client Reviews</span>
             </div>
-            <div className="space-y-0.5">
-              <span className="block font-bold text-white text-sm">Sterilized Instruments</span>
-              <span className="text-neutral-300 text-[11px]">UV Sanitized Protocol</span>
+            <div className="space-y-0.5 bg-black/20 sm:bg-transparent p-2 sm:p-0 rounded-xl backdrop-blur-2xs sm:backdrop-blur-none">
+              <span className="block font-bold text-white text-xs sm:text-sm">Sterilized Instruments</span>
+              <span className="text-neutral-300 text-[10px] sm:text-[11px] block">UV Sanitized Protocol</span>
             </div>
           </div>
 
@@ -484,7 +484,7 @@ export default function HomePage() {
               </div>
 
               {/* Floating Badge */}
-              <div className="absolute -bottom-6 -right-2 sm:right-6 bg-white rounded-2xl p-4 shadow-xl border border-[#EAE6E3] max-w-xs space-y-1">
+              <div className="absolute -bottom-4 right-2 sm:right-6 bg-white rounded-2xl p-3 sm:p-4 shadow-xl border border-[#EAE6E3] max-w-[260px] sm:max-w-xs space-y-1">
                 <div className="flex items-center space-x-1 text-amber-500">
                   {[...Array(5)].map((_, i) => (
                     <Star key={i} className="w-3.5 h-3.5 fill-[#C7A77D] text-[#C7A77D]" />
@@ -651,16 +651,16 @@ export default function HomePage() {
             </h2>
             
             {/* Rating Banner */}
-            <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full bg-white border border-[#EAE6E3] shadow-xs">
-              <div className="flex items-center space-x-1 text-[#C7A77D]">
+            <div className="inline-flex flex-wrap items-center justify-center gap-2 px-4 py-2 rounded-2xl sm:rounded-full bg-white border border-[#EAE6E3] shadow-xs max-w-full text-center">
+              <div className="flex items-center space-x-1 text-[#C7A77D] shrink-0">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-[#C7A77D] text-[#C7A77D]" />
                 ))}
               </div>
               <span className="font-bold text-xs text-[#272525]">
-                4.7 / 5 — based on 100+ customer reviews
+                4.7 / 5 — based on 100+ client reviews
               </span>
-              <span className="text-[10px] text-[#707070]">(Business-Provided Data)</span>
+              <span className="text-[10px] text-[#707070] block xs:inline">(Verified Business Data)</span>
             </div>
           </div>
 

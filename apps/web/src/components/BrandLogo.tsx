@@ -112,15 +112,15 @@ export function BrandLogo({ variant = 'navbar', className = '' }: BrandLogoProps
 
   // Navbar default variant
   return (
-    <div className={`flex items-center space-x-3.5 group ${className}`}>
-      <div className="w-11 h-11 sm:w-[52px] sm:h-[52px] shrink-0 group-hover:scale-105 transition-transform duration-300">
-        <BrandLogo variant="mark" className="w-11 h-11 sm:w-[52px] sm:h-[52px]" />
+    <div className={`flex items-center space-x-2 sm:space-x-3.5 group min-w-0 ${className}`}>
+      <div className="w-9 h-9 sm:w-11 sm:h-11 md:w-[52px] md:h-[52px] shrink-0 group-hover:scale-105 transition-transform duration-300">
+        <BrandLogo variant="mark" className="w-9 h-9 sm:w-11 sm:h-11 md:w-[52px] md:h-[52px]" />
       </div>
-      <div className="flex flex-col justify-center">
-        <span className="text-xl sm:text-[22px] font-extrabold tracking-tight text-salon-black leading-tight group-hover:text-salon-rose transition-colors">
+      <div className="flex flex-col justify-center min-w-0">
+        <span className="text-base sm:text-lg md:text-xl lg:text-[22px] font-extrabold tracking-tight text-salon-black leading-tight group-hover:text-salon-rose transition-colors truncate">
           Beyond Beauty Saloon
         </span>
-        <span className="text-[10px] sm:text-[11px] tracking-[0.2em] uppercase font-semibold text-salon-gold leading-none mt-0.5">
+        <span className="text-[9px] sm:text-[10px] md:text-[11px] tracking-[0.15em] sm:tracking-[0.2em] uppercase font-semibold text-salon-gold leading-none mt-0.5 truncate">
           Savedi · Ahilyanagar
         </span>
       </div>

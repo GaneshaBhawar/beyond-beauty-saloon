@@ -142,21 +142,21 @@ export function AdminShell({
       
       {/* Top Header */}
       <header className="sticky top-0 z-40 bg-white border-b border-[#EAE6E3] shadow-xs">
-        <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 px-3 sm:px-6 lg:px-8 max-w-full overflow-hidden">
           
           {/* Left: Mobile Toggle & Breadcrumbs */}
-          <div className="flex items-center space-x-3 sm:space-x-4">
+          <div className="flex items-center space-x-2 sm:space-x-4 min-w-0">
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl border border-[#EAE6E3] hover:bg-[#FAF9F7] text-[#252525] transition-colors"
+              className="lg:hidden p-1.5 sm:p-2 rounded-xl border border-[#EAE6E3] hover:bg-[#FAF9F7] text-[#252525] transition-colors shrink-0"
               aria-label="Toggle Navigation Drawer"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
 
-            <Link href="/" className="lg:hidden flex items-center shrink-0">
-              <BrandLogo variant="navbar" className="scale-90 origin-left" />
+            <Link href="/" className="lg:hidden flex items-center shrink min-w-0" aria-label="Beyond Beauty Saloon Home">
+              <BrandLogo variant="navbar" className="scale-85 sm:scale-95 origin-left" />
             </Link>
 
             {/* Desktop Breadcrumbs */}

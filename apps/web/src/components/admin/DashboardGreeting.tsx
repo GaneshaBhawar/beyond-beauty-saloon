@@ -32,8 +32,8 @@ export function DashboardGreeting({
       
       {/* Greeting and Context */}
       <div className="space-y-1.5">
-        <div className="flex items-center space-x-2">
-          <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-full bg-[#FAF9F7] border border-[#EAE6E3] text-[11px] font-bold text-[#B76E79] uppercase tracking-wider">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="inline-flex items-center space-x-1 px-3 py-1 rounded-full bg-[#FAF9F7] border border-[#EAE6E3] text-[10px] sm:text-[11px] font-bold text-[#B76E79] uppercase tracking-wider">
             <Sparkles className="w-3 h-3 text-[#C3A57B]" />
             <span>Operations Control Center</span>
           </span>

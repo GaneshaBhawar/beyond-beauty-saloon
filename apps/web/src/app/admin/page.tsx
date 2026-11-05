@@ -45,7 +45,7 @@ import {
 } from 'lucide-react';
 import { getStoredAppointments, saveAppointment, updateAppointmentStatus, StoredAppointment } from '@/data/bookingStore';
 import { SALON_SERVICES } from '@/data/servicesData';
-import { apiRequest, getAuthUser, clearAuthSession } from '@/lib/api';
+import { apiRequest, getAuthUser, clearAuthSession, AuthUser } from '@/lib/api';
 import { useTheme, THEME_PRESETS } from '@/components/ThemeContext';
 
 // Modular Admin V2 Components
@@ -77,6 +77,20 @@ export default function AdminDashboardPage() {
   const [selectedDate, setSelectedDate] = useState(() => new Date().toISOString().split('T')[0]);
   const [searchQuery, setSearchQuery] = useState('');
   const [salesRange, setSalesRange] = useState<'daily' | 'weekly' | 'monthly'>('daily');
+
+  // Session & Authentication Verification State
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+  const [authChecked, setAuthChecked] = useState(false);
+
+  useEffect(() => {
+    const user = getAuthUser();
+    if (!user || user.role !== 'OWNER_ADMIN') {
+      router.replace('/login?redirect=/admin');
+      return;
+    }
+    setCurrentUser(user);
+    setAuthChecked(true);
+  }, [router]);
 
   // Dashboard Data State
   const [dashboardData, setDashboardData] = useState<DashboardV2Payload | null>(null);
@@ -167,6 +181,8 @@ export default function AdminDashboardPage() {
   };
 
   useEffect(() => {
+    if (!authChecked) return;
+
     fetchDashboardData();
     fetchStaffList();
     refreshLocalAppointments();
@@ -178,7 +194,7 @@ export default function AdminDashboardPage() {
 
     window.addEventListener('appointments-updated', handleAptsUpdated);
     return () => window.removeEventListener('appointments-updated', handleAptsUpdated);
-  }, [selectedDate, salesRange]);
+  }, [authChecked, selectedDate, salesRange]);
 
   // Handle staff onboarding
   const handleCreateStaff = async (e: React.FormEvent) => {
@@ -374,6 +390,18 @@ export default function AdminDashboardPage() {
     })),
   };
 
+  if (!authChecked) {
+    return (
+      <div className="min-h-screen bg-salon-ivory flex flex-col items-center justify-center p-4">
+        <div className="w-14 h-14 rounded-2xl bg-salon-rose/10 border border-salon-rose/20 flex items-center justify-center mb-4 shadow-luxury">
+          <ShieldCheck className="w-7 h-7 text-salon-rose animate-pulse" />
+        </div>
+        <p className="text-base font-serif font-bold text-salon-black">Verifying Administrative Access...</p>
+        <p className="text-xs text-salon-muted mt-1">Validating authenticated session permissions</p>
+      </div>
+    );
+  }
+
   return (
     <AdminShell
       activeTab={activeTab}
@@ -394,7 +422,7 @@ export default function AdminDashboardPage() {
             
             {/* 1. Dashboard Greeting & Date Filter */}
             <DashboardGreeting
-              ownerName="Salon Owner"
+              ownerName={currentUser ? `${currentUser.firstName} ${currentUser.lastName}` : 'Sunita Kapoor'}
               selectedDate={selectedDate}
               onDateChange={setSelectedDate}
               onRefresh={fetchDashboardData}

@@ -35,11 +35,11 @@ export function Navbar() {
           : 'bg-white/90 backdrop-blur-xs border-b border-[#EAE6E3]/60'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 sm:h-[84px]">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16 sm:h-20 lg:h-[84px] gap-2">
           
           {/* Left: Brand Identity */}
-          <Link href="/" className="shrink-0 flex items-center group" aria-label="Beyond Beauty Saloon Home">
+          <Link href="/" className="shrink min-w-0 flex items-center group" aria-label="Beyond Beauty Saloon Home">
             <BrandLogo variant="navbar" />
           </Link>
 
@@ -91,19 +91,19 @@ export function Navbar() {
           </div>
 
           {/* Mobile Navigation Controls */}
-          <div className="flex lg:hidden items-center space-x-2">
+          <div className="flex lg:hidden items-center space-x-1.5 sm:space-x-2 shrink-0">
             <Link
               href="/book"
-              className="px-4 py-2 rounded-full text-xs font-bold tracking-wide text-white bg-[#B76E79] shadow-xs flex items-center"
+              className="px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full text-[11px] sm:text-xs font-bold tracking-wide text-white bg-[#B76E79] hover:bg-[#9A5A64] shadow-xs flex items-center shrink-0 transition-colors"
             >
-              <Calendar className="w-3.5 h-3.5 mr-1" />
-              Book Now
+              <Calendar className="w-3 h-3 sm:w-3.5 sm:h-3.5 mr-1" />
+              <span>Book<span className="hidden xs:inline"> Now</span></span>
             </Link>
 
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 rounded-xl text-[#272525] hover:text-[#B76E79] hover:bg-[#FAF8F5] transition-colors border border-[#EAE6E3]"
+              className="p-1.5 sm:p-2 rounded-xl text-[#272525] hover:text-[#B76E79] hover:bg-[#FAF8F5] transition-colors border border-[#EAE6E3] shrink-0"
               aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
               aria-expanded={mobileMenuOpen}
             >

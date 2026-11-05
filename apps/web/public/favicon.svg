@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="rose" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#B76E79" />
+      <stop offset="100%" stop-color="#9A5A64" />
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DFC386" />
+      <stop offset="100%" stop-color="#C7A77D" />
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="46" fill="#FAF8F5" stroke="url(#gold)" stroke-width="2" />
+  <circle cx="50" cy="50" r="40" fill="url(#rose)" fill-opacity="0.12" stroke="url(#rose)" stroke-width="1.5" />
+  <path d="M50 20 L53 32 L65 30 L56 39 L62 50 L50 44 L38 50 L44 39 L35 30 L47 32 Z" fill="url(#gold)" />
+  <path d="M34 74 C37 74 40 71 40 67 C40 63 37 60 33 60 C29 60 26 63 26 67 C26 71 29 74 34 74 Z" stroke="url(#rose)" stroke-width="2.5" fill="none" />
+  <path d="M66 74 C69 74 72 71 72 67 C72 63 69 60 65 60 C61 60 58 63 58 67 C58 71 61 74 66 74 Z" stroke="url(#rose)" stroke-width="2.5" fill="none" />
+  <path d="M37 62 L50 47 L63 62" stroke="url(#rose)" stroke-width="2.5" stroke-linecap="round" />
+  <path d="M50 47 L58 35 M50 47 L42 35" stroke="url(#gold)" stroke-width="2.5" stroke-linecap="round" />
+  <circle cx="50" cy="47" r="2.5" fill="url(#gold)" />
+</svg>
