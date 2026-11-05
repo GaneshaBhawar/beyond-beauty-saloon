@@ -45,6 +45,9 @@ module.exports = {
           'sans-serif',
         ],
       },
+      screens: {
+        xs: '380px',
+      },
       boxShadow: {
         'luxury': '0 10px 30px -10px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.03)',
         'luxury-hover': '0 20px 40px -15px rgba(0, 0, 0, 0.12), 0 8px 10px -4px rgba(0, 0, 0, 0.04)',

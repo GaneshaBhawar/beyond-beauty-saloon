@@ -19,7 +19,7 @@ export function Footer() {
               Savedi’s distinguished beauty sanctuary offering personalised hair styling, chemical treatments, clinical dermal therapies, and bridal couture in Ahilyanagar.
             </p>
             
-            <div className="pt-1 flex items-center space-x-3">
+            <div className="pt-1 flex flex-wrap items-center gap-2.5 sm:gap-3">
               <a
                 href="https://www.instagram.com/beyond__beauty_saloon/"
                 target="_blank"

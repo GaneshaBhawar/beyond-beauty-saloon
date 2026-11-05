@@ -1,8 +1,15 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { Navbar } from '@/components/Navbar';
 import { Footer } from '@/components/Footer';
 import { ThemeProvider } from '@/components/ThemeContext';
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  themeColor: '#FAF8F5',
+};
 
 export const metadata: Metadata = {
   title: 'Beyond Beauty Saloon | Luxury Hair, Skin & Bridal Studio in Savedi, Ahilyanagar',
@@ -30,11 +37,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="min-h-screen flex flex-col antialiased selection:bg-salon-rose selection:text-white">
+    <html lang="en" className="overflow-x-hidden w-full max-w-full">
+      <body className="min-h-screen flex flex-col antialiased selection:bg-salon-rose selection:text-white overflow-x-hidden w-full max-w-full relative">
         <ThemeProvider>
           <Navbar />
-          <main className="flex-grow">{children}</main>
+          <main className="flex-grow w-full max-w-full overflow-x-hidden">{children}</main>
           <Footer />
         </ThemeProvider>
       </body>

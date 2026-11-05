@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { Lock, Mail, ArrowRight, Shield, User, Scissors, Eye, EyeOff, AlertCircle, KeyRound, Sparkles } from 'lucide-react';
@@ -34,6 +34,17 @@ export default function LoginPage() {
     }
   };
 
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const redirect = new URLSearchParams(window.location.search).get('redirect');
+      if (redirect && redirect.startsWith('/admin')) {
+        handleRoleSelect('OWNER_ADMIN');
+      } else if (redirect && redirect.startsWith('/employee')) {
+        handleRoleSelect('EMPLOYEE');
+      }
+    }
+  }, []);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -59,11 +70,21 @@ export default function LoginPage() {
       setAuthSession(res.data.token, res.data.user);
       setSuccessMessage(`Welcome back, ${res.data.user.firstName}! Redirecting...`);
 
+      const redirectTarget = typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('redirect') : null;
+
       setTimeout(() => {
         if (res.data!.user.role === 'OWNER_ADMIN') {
-          router.push('/admin');
+          if (redirectTarget && redirectTarget.startsWith('/') && !redirectTarget.startsWith('//')) {
+            router.push(redirectTarget);
+          } else {
+            router.push('/admin');
+          }
         } else if (res.data!.user.role === 'EMPLOYEE') {
-          router.push('/employee');
+          if (redirectTarget && redirectTarget.startsWith('/employee')) {
+            router.push(redirectTarget);
+          } else {
+            router.push('/employee');
+          }
         } else {
           router.push('/account');
         }

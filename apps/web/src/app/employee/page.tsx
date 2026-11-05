@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import {
   Scissors,
   Clock,
@@ -67,14 +68,20 @@ export default function EmployeePortalPage() {
     }
   };
 
+  const router = useRouter();
+
   useEffect(() => {
     const user = getAuthUser();
+    if (!user || (user.role !== 'EMPLOYEE' && user.role !== 'OWNER_ADMIN')) {
+      router.replace('/login?redirect=/employee');
+      return;
+    }
     setCurrentUser(user);
     loadAppointments();
     fetchNotifications();
     window.addEventListener('appointments-updated', loadAppointments);
     return () => window.removeEventListener('appointments-updated', loadAppointments);
-  }, []);
+  }, [router]);
 
   const handleToggleAttendance = async () => {
     const nextType = attendanceStatus === 'CHECKED_IN' ? 'CLOCK_OUT' : 'CLOCK_IN';

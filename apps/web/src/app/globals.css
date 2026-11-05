@@ -105,6 +105,14 @@
   --theme-contrast: #14141B;
 }
 
+html,
+body {
+  max-width: 100vw;
+  width: 100%;
+  overflow-x: hidden;
+  position: relative;
+}
+
 body {
   background-color: var(--theme-bg);
   color: var(--theme-text-main);

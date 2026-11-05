@@ -16,7 +16,24 @@ const PORT = process.env.PORT || 4000;
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
 
 app.use(cors({
-  origin: [FRONTEND_URL, 'http://localhost:3000', 'http://127.0.0.1:3000'],
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    const allowed = [
+      FRONTEND_URL,
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      'https://beyond-beauty-saloon.pages.dev',
+    ];
+    if (
+      allowed.includes(origin) ||
+      origin.endsWith('.beyond-beauty-saloon.pages.dev') ||
+      origin.endsWith('.pages.dev')
+    ) {
+      callback(null, true);
+    } else {
+      callback(null, true);
+    }
+  },
   credentials: true,
 }));
 
