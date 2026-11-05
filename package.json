@@ -16,7 +16,8 @@
     "lint": "pnpm --recursive run lint",
     "db:generate": "pnpm --filter @beyond/api db:generate",
     "db:push": "pnpm --filter @beyond/api db:push",
-    "db:seed": "pnpm --filter @beyond/api db:seed"
+    "db:seed": "pnpm --filter @beyond/api db:seed",
+    "deploy:web": "pnpm --filter @beyond/web build && npx wrangler@3 pages deploy apps/web/out --project-name beyond-beauty-saloon --branch main"
   },
   "devDependencies": {
     "typescript": "^5.4.5"
